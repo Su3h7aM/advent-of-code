@@ -13,27 +13,28 @@ import (
 )
 
 func main() {
-	day, year, cookie := ParseFlags()
-	GetInput(day, year, cookie)
+	day, year, cookie, userAgent := ParseFlags()
+	GetInput(day, year, cookie, userAgent)
 }
 
-func GetInput(day, year int, cookie string) {
+func GetInput(day, year int, cookie string, userAgent string) {
 	url := fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", year, day)
-	input := RequestAOC(url, cookie)
+	input := RequestAOC(url, cookie, userAgent)
 
 	filename := fmt.Sprintf("%d/day%02d/input.txt", year, day)
 	WriteFile(filename, input)
 
-	fmt.Println("Wrote input to ", filename)
+	fmt.Println("Wrote input to", filename)
 }
 
-func ParseFlags() (day, year int, cookie string) {
+func ParseFlags() (day, year int, cookie string, userAgent string) {
 	today := time.Now()
 
 	flag.IntVar(&day, "day", today.Day(), "day number to fetch, 1-25")
 	flag.IntVar(&year, "year", today.Year(), "year to fetch")
 
 	flag.StringVar(&cookie, "cookie", os.Getenv("AOC_SESSION_TOKEN"), "your session cookie")
+	flag.StringVar(&userAgent, "user-agent", os.Getenv("AOC_USER_AGENT"), "Your User-Agent header")
 	flag.Parse()
 
 	if day < 1 || day > 25 {
@@ -48,10 +49,10 @@ func ParseFlags() (day, year int, cookie string) {
 		log.Fatalf("AOC_SESSION_TOKEN environment variable is required")
 	}
 
-	return day, year, cookie
+	return day, year, cookie, userAgent
 }
 
-func RequestAOC(url string, cookie string) []byte {
+func RequestAOC(url string, cookie string, userAgent string) []byte {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -59,6 +60,8 @@ func RequestAOC(url string, cookie string) []byte {
 	if err != nil {
 		log.Fatalf("making request: %s", err)
 	}
+
+	req.Header.Add("User-Agent", userAgent)
 
 	req.AddCookie(&http.Cookie{
 		Name:  "session",
