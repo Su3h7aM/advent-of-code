@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+shopt -s globstar
+
+#MISE alias="c"
+#MISE description="Delete all build artifacts"
+
+rm -rf aoc-cli
+
+#USAGE flag "--inputs" help="Delete all AOC inputs"
+
+if [ "$usage_inputs" ]; then
+    rm -rf -- **/input.txt
+fi

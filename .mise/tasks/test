@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e
+
+#MISE alias="t"
+#MISE description="Run tests a specific day"
+
+#USAGE flag "--year <year>" help="Year to test for"
+#USAGE flag "--day <day>" help="Day to test for"
+
+if [ -z "$usage_day" ]; then
+    usage_day=$(date +%d)
+fi
+
+if [ -z "$usage_year" ]; then
+    usage_year=$(date +%Y)
+fi
+
+day=$(printf %02d "$usage_day")
+
+cd "$usage_year"/day"$day"/
+
+go test -v

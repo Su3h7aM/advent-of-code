@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+#MISE alias="b"
+#MISE description="Build the CLI"
+
+go build -o aoc-cli util/main.go
