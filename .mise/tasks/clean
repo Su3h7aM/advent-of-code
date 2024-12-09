@@ -6,7 +6,7 @@ shopt -s globstar
 #MISE alias="c"
 #MISE description="Delete all build artifacts"
 
-rm -rf aoc-cli
+rm -rf bin/
 
 #USAGE flag "--inputs" help="Delete all AOC inputs"
 
